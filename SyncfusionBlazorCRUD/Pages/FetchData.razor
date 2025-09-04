@@ -1,0 +1,76 @@
+﻿@page "/employee"
+@using Syncfusion.Blazor.Grids
+@using System.ComponentModel.DataAnnotations
+
+<h3>Syncfusion Blazor Grid - CRUD Operations</h3>
+
+<SfGrid @ref="Grid" DataSource="@Employees" AllowPaging="true" AllowSorting="true"
+        Toolbar="ToolbarItems"
+        ActionBegin="OnActionBegin">
+
+    <GridEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="EditMode.Normal" />
+
+    <GridColumns>
+        <GridColumn Field="Id" HeaderText="ID" IsPrimaryKey="true" Visible="false" />
+        <GridColumn Field="Name" HeaderText="Name" Width="150" TextAlign="TextAlign.Left" />
+        <GridColumn Field="Title" HeaderText="Title" Width="150" TextAlign="TextAlign.Left" />
+        <GridColumn Field="Age" HeaderText="Age" Width="100" TextAlign="TextAlign.Right" EditType="EditType.NumericEdit" />
+    </GridColumns>
+</SfGrid>
+
+@code {
+    private SfGrid<Employee> Grid;
+
+    private List<Employee> Employees = new()
+    {
+        new Employee { Id = 1, Name = "Alice", Title = "Developer", Age = 30 },
+        new Employee { Id = 2, Name = "Bob", Title = "Designer", Age = 25 },
+        new Employee { Id = 3, Name = "Charlie", Title = "Manager", Age = 40 }
+    };
+
+    private List<string> ToolbarItems = new() { "Add", "Edit", "Delete", "Update", "Cancel" };
+
+    private int EmployeeIdCounter = 4;
+
+    private void OnActionBegin(ActionEventArgs<Employee> args)
+    {
+        if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
+        {
+            var employee = args.Data;
+
+            if (employee.Id == 0) // New records
+            {
+                employee.Id = EmployeeIdCounter++;
+                Employees.Add(employee);
+            }
+            else // Update existing
+            {
+                var existing = Employees.FirstOrDefault(e => e.Id == employee.Id);
+                if (existing != null)
+                {
+                    existing.Name = employee.Name;
+                    existing.Title = employee.Title;
+                    existing.Age = employee.Age;
+                }
+            }
+        }
+        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+        {
+            var employee = args.Data;
+            Employees.RemoveAll(e => e.Id == employee.Id);
+        }
+    }
+
+    public class Employee
+    {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Name is required")]
+        public string? Name { get; set; }
+
+        public string? Title { get; set; }
+
+        [Range(18, 65, ErrorMessage = "Age must be between 18 and 65")]
+        public int Age { get; set; }
+    }
+}
