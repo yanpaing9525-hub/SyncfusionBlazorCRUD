@@ -1,0 +1,72 @@
+﻿@page "/employeewithapi"
+@using Syncfusion.Blazor.Grids
+@using System.Net.Http.Json
+@inject HttpClient Http
+
+<h3>Syncfusion Blazor - CRUD Operations with API</h3>
+
+<SfGrid @ref="Grid" DataSource="@Employees" AllowPaging="true" AllowSorting="true"
+        Toolbar="ToolbarItems"
+        ActionBegin="OnActionBegin">
+
+    <GridEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="EditMode.Normal" />
+
+    <GridColumns>
+        <GridColumn Field="Id" HeaderText="ID" IsPrimaryKey="true" Visible="false" />
+        <GridColumn Field="Name" HeaderText="Name" Width="150" TextAlign="TextAlign.Left" />
+        <GridColumn Field="Title" HeaderText="Title" Width="150" TextAlign="TextAlign.Left" />
+        <GridColumn Field="Age" HeaderText="Age" Width="100" TextAlign="TextAlign.Right" EditType="EditType.NumericEdit" />
+    </GridColumns>
+</SfGrid>
+
+@code {
+    private SfGrid<Employee> Grid;
+    private List<Employee> Employees = new();
+
+    private List<string> ToolbarItems = new() { "Add", "Edit", "Delete", "Update", "Cancel" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        // Replace with your API URL
+        Employees = await Http.GetFromJsonAsync<List<Employee>>("https://localhost:7120/api/employees/GetList");
+    }
+
+    private async void OnActionBegin(ActionEventArgs<Employee> args)
+    {
+        if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
+        {
+            var employee = args.Data;
+            if (employee.Id == 0)
+            {
+                // POST (Create)
+                var response = await Http.PostAsJsonAsync("https://localhost:7120/api/employees/Add", employee);
+                if (response.IsSuccessStatusCode)
+                {
+                    var createdEmployee = await response.Content.ReadFromJsonAsync<Employee>();
+                    // Assign generated Id
+                    employee.Id = createdEmployee.Id;
+                    await LoadData();
+                }
+            }
+            else
+            {
+                // PUT (Update)
+                await Http.PutAsJsonAsync($"https://localhost:5120/api/employees/Update/{employee.Id}", employee);
+                await LoadData();
+            }
+        }
+        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+        {
+            var employee = args.Data;
+            await Http.DeleteAsync($"https://localhost:7120/api/employees/Delete/{employee.Id}");
+            await LoadData();
+        }
+    }
+
+
+}

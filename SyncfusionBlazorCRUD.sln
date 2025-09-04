@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncfusionBlazorCRUD", "SyncfusionBlazorCRUD\SyncfusionBlazorCRUD.csproj", "{0F73E43C-315B-4B7E-9C7B-8300A75E5D03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncfusionBlazorCRUDApi", "SyncfusionBlazorCRUDApi\SyncfusionBlazorCRUDApi.csproj", "{F2343A2B-8689-4D57-9AAF-FA8B217D0365}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0F73E43C-315B-4B7E-9C7B-8300A75E5D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F73E43C-315B-4B7E-9C7B-8300A75E5D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F73E43C-315B-4B7E-9C7B-8300A75E5D03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2343A2B-8689-4D57-9AAF-FA8B217D0365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2343A2B-8689-4D57-9AAF-FA8B217D0365}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2343A2B-8689-4D57-9AAF-FA8B217D0365}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2343A2B-8689-4D57-9AAF-FA8B217D0365}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
